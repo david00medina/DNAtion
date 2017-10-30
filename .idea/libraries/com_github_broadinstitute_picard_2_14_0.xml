@@ -63,6 +63,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/broadinstitute/picard/2.14.0/picard-2.14.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/htsjdk-2.12.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
