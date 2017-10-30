@@ -36,7 +36,8 @@ public class Main {
 
         file = new File(GENOME);
 
-        Aligner aligner = new BWAligner(file, sample_1, sample_2, "out.sam", "error.log");
+        Aligner aligner = new BWAligner(file, sample_1, sample_2,
+                new File("../out.sam"), new File("../error.log"));
     }
 
 }

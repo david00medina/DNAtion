@@ -9,15 +9,15 @@ public class BWAligner implements Aligner {
     private File genome;
     private FASTQ sampleSq_1;
     private FASTQ sampleSq_2;
-    private String stdout;
-    private String stderr;
+    private File stdout;
+    private File stderr;
     private ProcessBuilder alignCmd;
     private int cores;
 
     private static final int SUCCESS = 0;
     private static final int FAILURE = -1;
 
-    public BWAligner(File genome, FASTQ sampleSq_1, FASTQ sampleSq_2, String stdout, String stderr) {
+    public BWAligner(File genome, FASTQ sampleSq_1, FASTQ sampleSq_2, File stdout, File stderr) {
         this.genome = genome;
         this.sampleSq_1 = sampleSq_1;
         this.sampleSq_2 = sampleSq_2;
@@ -28,7 +28,7 @@ public class BWAligner implements Aligner {
             System.out.println("Error loading the ProcessBuilder");
     }
 
-    public BWAligner(File genome, FASTQ sampleSq_1, String stdout) {
+    public BWAligner(File genome, FASTQ sampleSq_1, File stdout) {
         this.genome = genome;
         this.sampleSq_1 = sampleSq_1;
         this.stdout = stdout;
@@ -100,10 +100,8 @@ public class BWAligner implements Aligner {
 
         if (alignCmd == null) return FAILURE;
 
-        File err = new File(stderr);
-        File outFile = new File(stdout);
-        alignCmd.redirectError(ProcessBuilder.Redirect.to(err));
-        alignCmd.redirectOutput(ProcessBuilder.Redirect.to(outFile));
+        alignCmd.redirectError(ProcessBuilder.Redirect.to(stderr));
+        alignCmd.redirectOutput(ProcessBuilder.Redirect.to(stdout));
 
         try {
             Process process = alignCmd.start();
@@ -143,7 +141,7 @@ public class BWAligner implements Aligner {
         return sampleSq_2;
     }
 
-    public String getStdout() {
+    public File getStdout() {
         return stdout;
     }
 
@@ -155,15 +153,15 @@ public class BWAligner implements Aligner {
         this.cores = cores;
     }
 
-    public void setStdout(String stdout) {
+    public void setStdout(File stdout) {
         this.stdout = stdout;
     }
 
-    public String getStderr() {
+    public File getStderr() {
         return stderr;
     }
 
-    public void setStderr(String stderr) {
+    public void setStderr(File stderr) {
         this.stderr = stderr;
     }
 
