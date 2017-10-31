@@ -14,9 +14,6 @@ public class BWAligner implements Aligner {
     private ProcessBuilder alignCmd;
     private int cores;
 
-    private static final int SUCCESS = 0;
-    private static final int FAILURE = -1;
-
     public BWAligner(File genome, FASTQ sampleSq_1, FASTQ sampleSq_2, File stdout, File stderr) {
         this.genome = genome;
         this.sampleSq_1 = sampleSq_1;
@@ -24,8 +21,6 @@ public class BWAligner implements Aligner {
         this.stdout = stdout;
         this.stderr = stderr;
         cores = Runtime.getRuntime().availableProcessors();
-        if (alignSq() == FAILURE)
-            System.out.println("Error loading the ProcessBuilder");
     }
 
     public BWAligner(File genome, FASTQ sampleSq_1, File stdout) {
@@ -35,6 +30,7 @@ public class BWAligner implements Aligner {
         alignSq();
     }
 
+    @Override
     public int setSampleSq_1(FASTQ sample_1) {
         if (sample_1 == null)
             return FAILURE;
@@ -43,6 +39,7 @@ public class BWAligner implements Aligner {
         return SUCCESS;
     }
 
+    @Override
     public int setSampleSq_2(FASTQ sample_2) {
         if (sample_2 == null)
             return FAILURE;
@@ -51,6 +48,7 @@ public class BWAligner implements Aligner {
         return SUCCESS;
     }
 
+    @Override
     public int setSampleSq(FASTQ sample_1, FASTQ sample_2) {
         if (sample_1 == null || sample_2 == null)
             return FAILURE;
@@ -60,6 +58,7 @@ public class BWAligner implements Aligner {
         return SUCCESS;
     }
 
+    @Override
     public int setReferenceGenome(File genome) {
         if (genome == null)
             return FAILURE;
@@ -95,7 +94,8 @@ public class BWAligner implements Aligner {
         alignCmd = pb;
     }
 
-    private int alignSq() {
+    @Override
+    public int alignSq() {
         buildCmd();
 
         if (alignCmd == null) return FAILURE;
@@ -106,7 +106,7 @@ public class BWAligner implements Aligner {
         try {
             Process process = alignCmd.start();
             int exeCode = process.waitFor();
-            System.out.println("Program executed with any errors?"
+            System.out.println("Program executed with any errors? "
                     + (exeCode == 0 ? "No" : "Yes"));
 
         } catch (IOException e) {
@@ -125,50 +125,57 @@ public class BWAligner implements Aligner {
         return "Burrows-Wheeler Aligner";
     }
 
+    @Override
     public File getGenome() {
         return genome;
     }
 
-    public void setGenome(File genome) {
-        this.genome = genome;
-    }
-
+    @Override
     public FASTQ getSampleSq_1() {
         return sampleSq_1;
     }
 
+    @Override
     public FASTQ getSampleSq_2() {
         return sampleSq_2;
     }
 
+    @Override
     public File getStdout() {
         return stdout;
     }
 
+    @Override
     public int getCores() {
         return cores;
     }
 
+    @Override
     public void setCores(int cores) {
         this.cores = cores;
     }
 
+    @Override
     public void setStdout(File stdout) {
         this.stdout = stdout;
     }
 
+    @Override
     public File getStderr() {
         return stderr;
     }
 
+    @Override
     public void setStderr(File stderr) {
         this.stderr = stderr;
     }
 
+    @Override
     public ProcessBuilder getAlignCmd() {
         return alignCmd;
     }
 
+    @Override
     public void setAlignCmd(ProcessBuilder alignCmd) {
         this.alignCmd = alignCmd;
     }

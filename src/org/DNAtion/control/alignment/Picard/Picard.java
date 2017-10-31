@@ -4,6 +4,7 @@ import htsjdk.samtools.SAMFileHeader;
 import picard.sam.SortSam;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Picard {
     private File sam;
@@ -13,15 +14,17 @@ public class Picard {
     public Picard(File sam, File bam) {
         this.sam = sam;
         this.bam = bam;
-        this.sortedBam = new File(sam.getAbsolutePath().toLowerCase().
-                substring(0, sam.getAbsolutePath().indexOf(".sam")) + "_sorted.sam");
+        this.sortedBam = new File(sam.getParent() + "/out_sorted.bam");
     }
 
     public void sortAndConvert() {
         SortSam sortSam = new SortSam();
+
         sortSam.INPUT = sam;
         sortSam.OUTPUT = sortedBam;
         sortSam.SORT_ORDER = SAMFileHeader.SortOrder.coordinate;
+
+        sortSam.instanceMainWithExit(new String[]{});
     }
 
     public File getSam() {
