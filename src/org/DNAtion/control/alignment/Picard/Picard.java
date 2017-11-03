@@ -25,10 +25,10 @@ public class Picard {
 
         this.sam = sam;
         this.bam = bam;
-        this.sortedBam = new File(sam.getAbsolutePath().
-                substring(0, bam.getAbsolutePath().indexOf(".bam")) + "_sorted.bam");
-        this.dedupBam = new File(sortedBam.getAbsolutePath().
-                substring(0, sortedBam.getAbsolutePath().indexOf(".bam")) + "_dedup.bam");
+        this.sortedBam = new File(sam.getAbsolutePath().toLowerCase().
+                substring(0, bam.getAbsolutePath().toLowerCase().indexOf(".bam")) + "_sorted.bam");
+        this.dedupBam = new File(sortedBam.getAbsolutePath().toLowerCase().
+                substring(0, sortedBam.getAbsolutePath().toLowerCase().indexOf(".bam")) + "_dedup.bam");
     }
 
     public void execSortAndConvert() {
@@ -48,6 +48,7 @@ public class Picard {
 
         List<String> inputList = new ArrayList<>();
         inputList.add(sortedBam.getAbsolutePath());
+        System.out.println(sortedBam.getAbsolutePath());
         markDuplicates.INPUT = inputList;
         markDuplicates.OUTPUT = dedupBam;
         markDuplicates.METRICS_FILE = new File(dedupBam.getAbsolutePath().

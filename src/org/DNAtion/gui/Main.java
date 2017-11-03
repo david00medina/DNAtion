@@ -40,8 +40,8 @@ public class Main {
         Aligner aligner = new BWAligner(file, sample_1, sample_2,
                 new File("./out.sam"), new File("./error.log"));
 
-        if (aligner.alignSq() == BWAligner.FAILURE)
-            System.out.println("Error loading the ProcessBuilder");
+        /*if (aligner.alignSq() == BWAligner.FAILURE)
+            System.out.println("Error loading the ProcessBuilder");*/
 
         File sam = aligner.getStdout();
         File bam = new File(sam.getAbsolutePath().
@@ -49,7 +49,7 @@ public class Main {
         /*File sam = new File("./out.sam");
         File bam = new File("./out.bam");*/
         Picard picard = new Picard(sample_1.getFastqHeader().getVersion(), sam, bam, true);
-        picard.execSortAndConvert();
+        //picard.execSortAndConvert();
         picard.execMarkDuplicates();
         picard.execBuildBamIndex();
     }
