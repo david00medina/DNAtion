@@ -48,8 +48,10 @@ public class Main {
                 toLowerCase().substring(0, sam.getAbsolutePath().toLowerCase().indexOf(".sam")) + ".bam");
         /*File sam = new File("./out.sam");
         File bam = new File("./out.bam");*/
-        Picard picard = new Picard(sample_1.getFastqHeader().getVersion(), sam, bam);
+        Picard picard = new Picard(sample_1.getFastqHeader().getVersion(), sam, bam, true);
         picard.execSortAndConvert();
+        picard.execMarkDuplicates();
+        picard.execBuildBamIndex();
     }
 
 }

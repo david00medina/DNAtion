@@ -2,6 +2,7 @@ package org.DNAtion.control.alignment.Picard;
 
 import htsjdk.samtools.SAMFileHeader;
 import org.DNAtion.model.FASTQ.FASTQ;
+import picard.sam.BuildBamIndex;
 import picard.sam.SortSam;
 import picard.sam.markduplicates.MarkDuplicates;
 
@@ -11,13 +12,16 @@ import java.util.List;
 
 public class Picard {
     private int version;
+    private boolean buildIndex;
     private File sam;
     private File bam;
     private File sortedBam;
     private File dedupBam;
+    private File indexTarget;
 
-    public Picard(int version, File sam, File bam) {
+    public Picard(int version, File sam, File bam, boolean buildIndex) {
         this.version = version;
+        this.buildIndex = buildIndex;
 
         this.sam = sam;
         this.bam = bam;
@@ -35,6 +39,8 @@ public class Picard {
         sortSam.SORT_ORDER = SAMFileHeader.SortOrder.coordinate;
 
         sortSam.instanceMainWithExit(new String[]{});
+
+        if (buildIndex) indexTarget = sortedBam;
     }
 
     public void execMarkDuplicates() {
@@ -57,6 +63,15 @@ public class Picard {
         }
 
         markDuplicates.instanceMain(new String[]{});
+
+        if (buildIndex) indexTarget = dedupBam;
+    }
+
+    public void execBuildBamIndex() {
+        BuildBamIndex buildBamIndex = new BuildBamIndex();
+        buildBamIndex.INPUT = indexTarget.getAbsolutePath();
+
+        buildBamIndex.instanceMain(new String[]{});
     }
 
     public File getSam() {
