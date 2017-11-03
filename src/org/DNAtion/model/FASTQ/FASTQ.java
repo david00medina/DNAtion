@@ -132,7 +132,7 @@ public class FASTQ {
                 fastqFields.get(keyFastq[10].getValue()));
     }
 
-    private FASTQHeader getFastqHeader() {
+    public FASTQHeader getFastqHeader() {
         return fastqHeader;
     }
 

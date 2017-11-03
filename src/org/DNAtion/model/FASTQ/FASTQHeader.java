@@ -3,7 +3,7 @@ package org.DNAtion.model.FASTQ;
 import java.util.HashMap;
 import java.util.Map;
 
-class FASTQHeader {
+public class FASTQHeader {
     private String header;
     private Map<String, String> fields;
     private int version;
@@ -85,7 +85,7 @@ class FASTQHeader {
         return fields = new HashMap<>();
     }
 
-    int getVersion() {
+    public int getVersion() {
         return version;
     }
 }
