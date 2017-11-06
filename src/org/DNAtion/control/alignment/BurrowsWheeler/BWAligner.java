@@ -68,8 +68,6 @@ public class BWAligner implements Aligner {
     }
 
     private void buildCmd() {
-        /*if(sampleSq_1 == null)
-            return null;*/
 
         ProcessBuilder pb;
 

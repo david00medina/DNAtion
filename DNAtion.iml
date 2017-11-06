@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="com.github.broadinstitute:picard:2.14.0" level="project" />
+    <orderEntry type="library" exported="" name="com.intel:genomicsdb-gatk4:0.4.0" level="project" />
   </component>
 </module>

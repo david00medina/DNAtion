@@ -90,4 +90,36 @@ public class Picard {
     public void setBam(File bam) {
         this.bam = bam;
     }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public File getSortedBam() {
+        return sortedBam;
+    }
+
+    public void setSortedBam(File sortedBam) {
+        this.sortedBam = sortedBam;
+    }
+
+    public File getDedupBam() {
+        return dedupBam;
+    }
+
+    public void setDedupBam(File dedupBam) {
+        this.dedupBam = dedupBam;
+    }
+
+    public File getIndexTarget() {
+        return indexTarget;
+    }
+
+    public void setIndexTarget(File indexTarget) {
+        this.indexTarget = indexTarget;
+    }
 }

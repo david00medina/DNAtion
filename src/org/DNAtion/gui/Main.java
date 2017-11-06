@@ -2,6 +2,7 @@ package org.DNAtion.gui;
 
 import org.DNAtion.control.alignment.Aligner;
 import org.DNAtion.control.alignment.BurrowsWheeler.BWAligner;
+import org.DNAtion.control.alignment.GATK.BaseRecalibration;
 import org.DNAtion.control.alignment.Picard.Picard;
 import org.DNAtion.model.FASTQ.FASTQ;
 
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class Main {
     private static final File HOME = new File(System.getProperty("user.home"));
     private static final String GENOME =
-            "/media/root/Ptasek twardy dysk/UICHUIMI/references/GRCh38.fa";
+            "/media/uichuimi/DiscoInterno/references/GRCh38/GRCh38.fa";
 
     public static void main(String[] args) throws IOException {
 
@@ -35,9 +36,9 @@ public class Main {
         FASTQ sample_2 = new FASTQ(file);
         System.out.println(sample_2.getRgHeader());
 
-        file = new File(GENOME);
+        File genome = new File(GENOME);
 
-        Aligner aligner = new BWAligner(file, sample_1, sample_2,
+        Aligner aligner = new BWAligner(genome, sample_1, sample_2,
                 new File("./out.sam"), new File("./error.log"));
 
         /*if (aligner.alignSq() == BWAligner.FAILURE)
@@ -52,6 +53,17 @@ public class Main {
         //picard.execSortAndConvert();
         picard.execMarkDuplicates();
         picard.execBuildBamIndex();
+
+        File dedup = picard.getDedupBam();
+        File recal = new File("./recal_data.table");
+
+        File[] references = {
+                new File("/media/uichuimi/DiscoInterno/ResourceBundle/Mills_indel/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"),
+                new File("/media/uichuimi/DiscoInterno/ResourceBundle/dbSNP/All_20170710.vcf.gz"),
+                new File("/media/uichuimi/DiscoInterno/ResourceBundle/1000G/1000G_omni2.5.hg38.vcf.gz")};
+
+        BaseRecalibration baseRecal = new BaseRecalibration(genome, dedup, recal, references);
+        baseRecal.applyBaseRecalibration();
     }
 
 }
