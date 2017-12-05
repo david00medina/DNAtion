@@ -12,7 +12,8 @@ public class FASTQ {
     private FASTQHeader fastqHeader;
     private File file;
     private Map<String, String> rgFields;
-    private String rgHeader;
+    private String bwaHeader;
+    private String bowtieHeader;
 
     public FASTQ(File file) {
         rgFields = new HashMap<>();
@@ -68,17 +69,32 @@ public class FASTQ {
                 break;
         }
 
-        rgHeader = "@RG\\t";
+        bwaHeader = "@RG\\t";
         int i = 1;
         for (String header :
                 rgFields.keySet()) {
 
-            rgHeader = rgHeader
+            bwaHeader = bwaHeader
                     + SAMEnum_RG.getEnumByString(header) + ":"
                     + rgFields.get(header);
 
             if (i < rgFields.size())
-                rgHeader = rgHeader + "\\t";
+                bwaHeader = bwaHeader + "\\t";
+
+            i++;
+        }
+
+        bowtieHeader = "@RG\t";
+        i = 1;
+        for (String header :
+                rgFields.keySet()) {
+
+            bowtieHeader = bowtieHeader
+                    + SAMEnum_RG.getEnumByString(header) + ":"
+                    + rgFields.get(header);
+
+            if (i < rgFields.size())
+                bowtieHeader = bowtieHeader + "\t";
 
             i++;
         }
@@ -140,12 +156,20 @@ public class FASTQ {
         this.fastqHeader = fastqHeader;
     }
 
-    public String getRgHeader() {
-        return rgHeader;
+    public String getBowtieHeader() {
+        return bowtieHeader;
     }
 
-    public void setRgHeader(String rgHeader) {
-        this.rgHeader = rgHeader;
+    public void setBowtieHeader(String bowtieHeader) {
+        this.bowtieHeader = bowtieHeader;
+    }
+
+    public String getBwaHeader() {
+        return bwaHeader;
+    }
+
+    public void setBwaHeader(String bwaHeader) {
+        this.bwaHeader = bwaHeader;
     }
 
     public File getFile() {
@@ -154,5 +178,13 @@ public class FASTQ {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public Map<String, String> getRgFields() {
+        return rgFields;
+    }
+
+    public void setRgFields(Map<String, String> rgFields) {
+        this.rgFields = rgFields;
     }
 }

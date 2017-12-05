@@ -1,7 +1,6 @@
 package org.DNAtion.control.alignment.Picard;
 
 import htsjdk.samtools.SAMFileHeader;
-import org.DNAtion.model.FASTQ.FASTQ;
 import picard.sam.BuildBamIndex;
 import picard.sam.SortSam;
 import picard.sam.markduplicates.MarkDuplicates;
@@ -25,9 +24,9 @@ public class Picard {
 
         this.sam = sam;
         this.bam = bam;
-        this.sortedBam = new File(sam.getAbsolutePath().toLowerCase().
+        this.sortedBam = new File(sam.getAbsolutePath().
                 substring(0, bam.getAbsolutePath().toLowerCase().indexOf(".bam")) + "_sorted.bam");
-        this.dedupBam = new File(sortedBam.getAbsolutePath().toLowerCase().
+        this.dedupBam = new File(sortedBam.getAbsolutePath().
                 substring(0, sortedBam.getAbsolutePath().toLowerCase().indexOf(".bam")) + "_dedup.bam");
     }
 
@@ -57,10 +56,10 @@ public class Picard {
         markDuplicates.TAGGING_POLICY = MarkDuplicates.DuplicateTaggingPolicy.All;
         markDuplicates.ASSUME_SORT_ORDER = SAMFileHeader.SortOrder.coordinate;
         if (version == 2) {
-            markDuplicates.READ_NAME_REGEX =
-                    "/(?=^(?:[^:\\s]+:){4}([^:\\s]+))"
+            markDuplicates.READ_NAME_REGEX = "[a-zA-Z0-9]+:[0-9]:([0-9]+):([0-9]+):([0-9]+).*";
+                    /*"/(?=^(?:[^:\\s]+:){4}([^:\\s]+))"
                             + "(?=^(?:[^:\\s]+:){5}([^:\\s]+))"
-                            + "(?=^(?:[^:\\s]+:){6}([^:\\s]+))/y";
+                            + "(?=^(?:[^:\\s]+:){6}([^:\\s]+))/g";*/
         }
 
         markDuplicates.instanceMain(new String[]{});
@@ -71,6 +70,7 @@ public class Picard {
     public void execBuildBamIndex() {
         BuildBamIndex buildBamIndex = new BuildBamIndex();
         buildBamIndex.INPUT = indexTarget.getAbsolutePath();
+        buildBamIndex.CREATE_INDEX = true;
 
         buildBamIndex.instanceMain(new String[]{});
     }

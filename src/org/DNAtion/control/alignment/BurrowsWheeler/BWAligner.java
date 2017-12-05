@@ -27,6 +27,7 @@ public class BWAligner implements Aligner {
         this.genome = genome;
         this.sampleSq_1 = sampleSq_1;
         this.stdout = stdout;
+        cores = Runtime.getRuntime().availableProcessors();
         alignSq();
     }
 
@@ -73,7 +74,7 @@ public class BWAligner implements Aligner {
 
         if (sampleSq_2 != null) {
             String[] bwa = {"bwa", "mem", "-M",
-                    "-R", sampleSq_1.getRgHeader(),
+                    "-R", sampleSq_1.getBwaHeader(),
                     "-t", Integer.toString(cores),
                     genome.getAbsolutePath(),
                     sampleSq_1.getFile().getAbsolutePath()};
@@ -81,7 +82,7 @@ public class BWAligner implements Aligner {
             pb = new ProcessBuilder(bwa);
         } else {
             String[] bwa = {"bwa", "mem", "-M",
-                    "-R", sampleSq_1.getRgHeader(),
+                    "-R", sampleSq_1.getBwaHeader(),
                     "-t", Integer.toString(cores),
                     genome.getAbsolutePath(),
                     sampleSq_1.getFile().getAbsolutePath(),

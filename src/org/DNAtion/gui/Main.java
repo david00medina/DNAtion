@@ -1,10 +1,13 @@
 package org.DNAtion.gui;
 
-import org.DNAtion.control.alignment.Aligner;
-import org.DNAtion.control.alignment.BurrowsWheeler.BWAligner;
-import org.DNAtion.control.alignment.GATK.BaseRecalibration;
+import org.DNAtion.control.alignment.Bowtie2.Bowtie2;
+import org.DNAtion.control.alignment.GATK.BaseRecalibrator;
+import org.DNAtion.control.alignment.GATK.GenotypeGVCFs;
+import org.DNAtion.control.alignment.GATK.HaplotypeCaller;
+import org.DNAtion.control.alignment.GATK.VariantRecalibrator;
 import org.DNAtion.control.alignment.Picard.Picard;
 import org.DNAtion.model.FASTQ.FASTQ;
+import org.DNAtion.model.SAM.SAMEnum_RG;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +19,7 @@ public class Main {
             "/media/uichuimi/DiscoInterno/references/GRCh38/GRCh38.fa";
 
     public static void main(String[] args) throws IOException {
-
+        // Get input files (samples)
         String in;
         Scanner scanner = new Scanner(System.in);
 
@@ -26,7 +29,7 @@ public class Main {
         File file = new File(in);
         System.out.println(file.getAbsolutePath());
         FASTQ sample_1 = new FASTQ(file);
-        System.out.println(sample_1.getRgHeader());
+        System.out.println(sample_1.getBwaHeader());
 
         System.out.print("Introduzca segunda muestra biológica : ");
         in = scanner.nextLine();
@@ -34,36 +37,76 @@ public class Main {
         file = new File(in);
 
         FASTQ sample_2 = new FASTQ(file);
-        System.out.println(sample_2.getRgHeader());
+        System.out.println(sample_2.getBwaHeader());
+        System.out.println(sample_2.getRgFields().get(SAMEnum_RG.ID.getValue()));
 
         File genome = new File(GENOME);
 
-        Aligner aligner = new BWAligner(genome, sample_1, sample_2,
-                new File("./out.sam"), new File("./error.log"));
+
+        // Align DNA sequences on the reference genome
+        Bowtie2 aligner = new Bowtie2(genome,
+                sample_1,
+                sample_2,
+                new File("out.sam"),
+                new File("error.log"));
+        //aligner.buildGenome();
+        if(aligner.alignSq() == Bowtie2.FAILURE)
+            System.out.println("Error loading the ProcessBuilder");
+
+        /*Aligner aligner = new BWAligner(genome, sample_1, sample_2,
+                new File("./out.sam"), new File("./error.log"));*/
 
         /*if (aligner.alignSq() == BWAligner.FAILURE)
             System.out.println("Error loading the ProcessBuilder");*/
 
+
+        // Sort and mark duplicates on DNA sequences
         File sam = aligner.getStdout();
         File bam = new File(sam.getAbsolutePath().
-                toLowerCase().substring(0, sam.getAbsolutePath().toLowerCase().indexOf(".sam")) + ".bam");
+                substring(0, sam.getAbsolutePath().toLowerCase().indexOf(".sam")) + ".bam");
         /*File sam = new File("./out.sam");
         File bam = new File("./out.bam");*/
         Picard picard = new Picard(sample_1.getFastqHeader().getVersion(), sam, bam, true);
-        //picard.execSortAndConvert();
+        picard.execSortAndConvert();
         picard.execMarkDuplicates();
         picard.execBuildBamIndex();
 
+
+        // Base Recalibration
         File dedup = picard.getDedupBam();
-        File recal = new File("./recal_data.table");
-
+        File recal = new File("recal_reads.bam");
         File[] references = {
-                new File("/media/uichuimi/DiscoInterno/ResourceBundle/Mills_indel/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"),
-                new File("/media/uichuimi/DiscoInterno/ResourceBundle/dbSNP/All_20170710.vcf.gz"),
-                new File("/media/uichuimi/DiscoInterno/ResourceBundle/1000G/1000G_omni2.5.hg38.vcf.gz")};
+                new File("/media/uichuimi/DiscoInterno/ResourceBundle/Mills_indel/GATK-resourcebundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz"),
+                new File("/media/uichuimi/DiscoInterno/ResourceBundle/dbSNP/TODO/All_20170710.vcf.gz")};
+        System.out.println(dedup);
+        BaseRecalibrator baseRecal = new BaseRecalibrator(genome, dedup, recal, true, true, references);
+        baseRecal.execBaseRecalibration();
 
-        BaseRecalibration baseRecal = new BaseRecalibration(genome, dedup, recal, references);
-        baseRecal.applyBaseRecalibration();
+
+
+        // Call variants/haplotypes
+        File haploGVCF = new File("raw_variants_haplotype.g.vcf");
+        HaplotypeCaller haplotypeCaller = new HaplotypeCaller(genome, recal, haploGVCF);
+        haplotypeCaller.execCallVariant();
+
+
+        // Call joint genotyping
+        File genotypeGVCF = new File("raw_variants.vcf");
+        GenotypeGVCFs genotypeGVCFs = new GenotypeGVCFs(genome, haploGVCF, genotypeGVCF);
+
+        // Filter Variants
+        File[] hapmap = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/hapmap_3.3.hg38.vcf.gz")};
+        File[] omni = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/Omni/GATK-resourcebundle/1000G_omni2.5.hg38.vcf.gz")};
+        File[] thousandG = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/1000G/GATK-resourcebundle/1000G_phase1.snps.high_confidence.hg38.vcf.gz")};
+        File[] dbSNP = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/dbSNP/TODO/All_20170710.vcf.gz")};
+        File[] mills_indel = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/Mills_indel/GATK-resourcebundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz")};
+        File analysisFile = new File("recalibrated_variants.vcf");
+        VariantRecalibrator variantRecalibrator = new VariantRecalibrator(genome, genotypeGVCF,
+                analysisFile, hapmap, omni, thousandG, dbSNP, mills_indel);
+        variantRecalibrator.execRecalibration_SNP();
+        variantRecalibrator.execApplyRecalibration_SNP();
+        variantRecalibrator.execRecalibration_INDEL();
+        variantRecalibrator.execApplyRecalibration_INDEL();
     }
 
 }

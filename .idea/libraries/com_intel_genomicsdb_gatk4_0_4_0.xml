@@ -7,7 +7,6 @@
       <root url="jar://$PROJECT_DIR$/lib/avro-mapred-1.7.7.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-1.7.7.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-core-asl-1.9.13.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-mapper-asl-1.9.13.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/chill_2.10-0.5.0.jar!/" />
@@ -152,7 +151,6 @@
       <root url="jar://$PROJECT_DIR$/lib/avro-mapred-1.7.7-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-1.7.7-javadoc.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-core-asl-1.9.13-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-mapper-asl-1.9.13-javadoc.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/chill_2.10-0.5.0-javadoc.jar!/" />
@@ -276,7 +274,6 @@
       <root url="jar://$PROJECT_DIR$/lib/avro-mapred-1.7.7-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/avro-1.7.7-sources.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/avro-ipc-1.7.7-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-core-asl-1.9.13-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jackson-mapper-asl-1.9.13-sources.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/chill_2.10-0.5.0-sources.jar!/" />
