@@ -37,7 +37,7 @@ public class Picard {
         sortSam.OUTPUT = sortedBam;
         sortSam.SORT_ORDER = SAMFileHeader.SortOrder.coordinate;
 
-        sortSam.instanceMainWithExit(new String[]{});
+        sortSam.instanceMain(new String[]{});
 
         if (buildIndex) indexTarget = sortedBam;
     }
@@ -47,7 +47,7 @@ public class Picard {
 
         List<String> inputList = new ArrayList<>();
         inputList.add(sortedBam.getAbsolutePath());
-        System.out.println(sortedBam.getAbsolutePath());
+
         markDuplicates.INPUT = inputList;
         markDuplicates.OUTPUT = dedupBam;
         markDuplicates.METRICS_FILE = new File(dedupBam.getAbsolutePath().
