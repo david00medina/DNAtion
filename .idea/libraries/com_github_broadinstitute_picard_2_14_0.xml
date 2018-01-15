@@ -1,0 +1,32 @@
+<component name="libraryTable">
+  <library name="com.github.broadinstitute:picard:2.14.0" type="repository">
+    <properties maven-id="com.github.broadinstitute:picard:2.14.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/broadinstitute/picard/2.14.0/picard-2.14.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/intel/gkl/gkl/0.5.3/gkl-0.5.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/broadinstitute/gatk-native-bindings/0.0.3/gatk-native-bindings-0.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.5/log4j-api-2.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-core/2.5/log4j-core-2.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/15.0/guava-15.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/samtools/htsjdk/2.12.0/htsjdk-2.12.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-jexl/2.1.1/commons-jexl-2.1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/xerial/snappy/snappy-java/1.1.4/snappy-java-1.1.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.4.1/commons-compress-1.4.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/tukaani/xz/1.5/xz-1.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/gov/nih/nlm/ncbi/ngs-java/1.2.4/ngs-java-1.2.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/broadinstitute/barclay/1.1.0/barclay-1.1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/sf/jopt-simple/jopt-simple/5.0.3/jopt-simple-5.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.18/freemarker-2.3.18.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/broadinstitute/picard/2.14.0/picard-2.14.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/broadinstitute/picard/2.14.0/picard-2.14.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
