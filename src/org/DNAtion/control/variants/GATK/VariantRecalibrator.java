@@ -50,7 +50,7 @@ public class VariantRecalibrator {
 
 	private void buildSNPCmd() {
 
-		String[] cmd = {"java", "-jar", "-Xmx4g", "GenomeAnalysisTK.jar",
+		String[] cmd = {"java", "-jar", "-Xmx4g", "/media/uichuimi/DiscoInterno/David/DNAtion/GenomeAnalysisTK.jar",
 				"-T", "VariantRecalibrator",
 				"-R", genome.getAbsolutePath(),
 				"--input", vcf_in.getAbsolutePath(),
@@ -80,7 +80,7 @@ public class VariantRecalibrator {
 
 	private void buildIndelCmd() {
 
-		String[] cmd = {"java", "-jar", "-Xmx4g", "GenomeAnalysisTK.jar",
+		String[] cmd = {"java", "-jar", "-Xmx4g", "/media/uichuimi/DiscoInterno/David/DNAtion/GenomeAnalysisTK.jar",
 				"-T", "VariantRecalibrator",
 				"-R", genome.getAbsolutePath(),
 				"--input", vcfSNP.getAbsolutePath(),
@@ -140,9 +140,11 @@ public class VariantRecalibrator {
 	private List<String> loadIndel() {
 		List<String> cmdList = new ArrayList<>();
 
-		for (int i = 0; i < mills_indel.length; i++) {
-			cmdList.add("-resource:mills,known=false,training=true,truth=true,prior=12.0");
-			cmdList.add(mills_indel[i].getAbsolutePath());
+		if(mills_indel[0] != null) {
+			for (int i = 0; i < mills_indel.length; i++) {
+				cmdList.add("-resource:mills,known=false,training=true,truth=true,prior=12.0");
+				cmdList.add(mills_indel[i].getAbsolutePath());
+			}
 		}
 
 		/*for (int i = 0; i < dbSNP.length; i++) {
@@ -156,56 +158,66 @@ public class VariantRecalibrator {
 	private List<String> loadSNP() {
 		List<String> cmdList = new ArrayList<>();
 
-
-		for (int i = 0; i < hapmap.length; i++) {
-			cmdList.add("-resource:hapmap,known=false,training=true,truth=true,prior=15.0");
-			cmdList.add(hapmap[i].getAbsolutePath());
+		if (hapmap[0] != null) {
+			for (int i = 0; i < hapmap.length; i++) {
+				cmdList.add("-resource:hapmap,known=false,training=true,truth=true,prior=15.0");
+				cmdList.add(hapmap[i].getAbsolutePath());
+			}
 		}
 
-
-		for (int i = 0; i < omni.length; i++) {
-			cmdList.add("-resource:omni,known=false,training=true,truth=true,prior=12.0");
-			cmdList.add(omni[i].getAbsolutePath());
+		if(omni[0] != null) {
+			for (int i = 0; i < omni.length; i++) {
+				cmdList.add("-resource:omni,known=false,training=true,truth=true,prior=12.0");
+				cmdList.add(omni[i].getAbsolutePath());
+			}
 		}
 
-		for (int i = 0; i < thousandG.length; i++) {
-			cmdList.add("-resource:1000G,known=false,training=true,truth=false,prior=10.0");
-			cmdList.add(thousandG[i].getAbsolutePath());
+		if (thousandG[0] != null) {
+			for (int i = 0; i < thousandG.length; i++) {
+				cmdList.add("-resource:1000G,known=false,training=true,truth=false,prior=10.0");
+				cmdList.add(thousandG[i].getAbsolutePath());
+			}
 		}
 
-		for (int i = 0; i < dbSNP.length; i++) {
-			cmdList.add("-resource:dbsnp,known=true,training=false,truth=false,prior=2.0");
-			cmdList.add(dbSNP[i].getAbsolutePath());
+		if (dbSNP[0] != null) {
+			for (int i = 0; i < dbSNP.length; i++) {
+				//cmdList.add("-resource:dbsnp,known=true,training=false,truth=false,prior=2.0");
+				cmdList.add("-resource:dbsnp,known=false,training=true,truth=true,prior=15.0");
+				cmdList.add(dbSNP[i].getAbsolutePath());
+			}
 		}
 
 		return cmdList;
 	}
 
 	public void execRecalibration_SNP() {
+		System.out.println("Executing SNPs VariantRecalibrator . . .");
 		buildSNPCmd();
 		runProcess();
 	}
 
 	public void execApplyRecalibration_SNP() {
+		System.out.println("Applying SNPs VariantRecalibrator . . .");
 		buildApplySNPCmd();
 		runProcess();
 	}
 
 	public void execRecalibration_INDEL() {
+		System.out.println("Executing INDELs VariantRecalibrator . . .");
 		buildIndelCmd();
 		runProcess();
 	}
 
 	public void execApplyRecalibration_INDEL() {
+		System.out.println("Applying INDELs VariantRecalibrator . . .");
 		buildApplyIndelCmd();
 		runProcess();
 	}
 
 	private int runProcess() {
-		System.out.println("Executing VariantRecalibrator . . .");
 		if (variantRecalCmd == null)
 			return Aligner.FAILURE;  // TODO: Modify this line
-		variantRecalCmd.redirectError(ProcessBuilder.Redirect.to(new File("variantrecalibrator.log")));
+		variantRecalCmd.redirectError(ProcessBuilder.Redirect.to(new File("VariantRecalibrator.log")));
 		try {
 			Process process = variantRecalCmd.start();
 			int exeCode = process.waitFor();

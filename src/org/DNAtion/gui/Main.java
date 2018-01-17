@@ -1,10 +1,7 @@
 package org.DNAtion.gui;
 
 import org.DNAtion.control.preprocessing.Bowtie2.Bowtie2;
-import org.DNAtion.control.variants.GATK.BaseRecalibrator;
-import org.DNAtion.control.variants.GATK.GenotypeGVCFs;
-import org.DNAtion.control.variants.GATK.HaplotypeCaller;
-import org.DNAtion.control.variants.GATK.VariantRecalibrator;
+import org.DNAtion.control.variants.GATK.*;
 import org.DNAtion.control.preprocessing.Picard.Picard;
 import org.DNAtion.model.FASTQ.FASTQ;
 import org.DNAtion.model.SAM.SAMEnum_RG;
@@ -82,6 +79,15 @@ public class Main {
         //baseRecal.execBaseRecalibration();
 
 
+
+        // Filter Variants databases
+        File[] hapmap = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/hapmap_3.3.hg38.vcf.gz")};
+        File[] omni = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Omni/GATK-resourcebundle/1000G_omni2.5.hg38.vcf.gz")};
+        File[] thousandG = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/1000G/GATK-resourcebundle/1000G_phase1.snps.high_confidence.hg38.vcf.gz")};
+        File[] dbSNP = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/dbSNP/TODO/All_20170710.vcf.gz")};
+        File[] mills_indel = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Mills_indel/GATK-resourcebundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz")};
+
+
         // Call variants/haplotypes
         File haploGVCF = new File("raw_variants_haplotype.g.vcf");
         HaplotypeCaller haplotypeCaller = new HaplotypeCaller(genome, recal, haploGVCF);
@@ -91,22 +97,22 @@ public class Main {
         // Call joint genotyping
         File genotypeGVCF = new File("raw_variants.vcf");
         GenotypeGVCFs genotypeGVCFs = new GenotypeGVCFs(genome, haploGVCF, genotypeGVCF);
-        //genotypeGVCFs.callVariant();
+        genotypeGVCFs.callVariant();
 
-        // Filter Variants
-        File[] hapmap = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Hapmap/GATK-resourcebundle/hapmap_3.3.hg38.vcf.gz")};
-        File[] omni = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Omni/GATK-resourcebundle/1000G_omni2.5.hg38.vcf.gz")};
-        File[] thousandG = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/1000G/GATK-resourcebundle/1000G_phase1.snps.high_confidence.hg38.vcf.gz")};
-        File[] dbSNP = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/dbSNP/TODO/All_20170710.vcf.gz")};
-        File[] mills_indel = {new File("/media/uichuimi/DiscoInterno/ResourceBundle/Mills_indel/GATK-resourcebundle/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz")};
+        // Call VariantAnnotator
+        File variantAnnotated = new File("raw_variants_annotated.vcf");
+        VariantAnnotator variantAnnotator = new VariantAnnotator(genome, genotypeGVCF, variantAnnotated, hapmap, omni, thousandG, dbSNP, mills_indel);
+        //variantAnnotator.execAnnotateVariant();
 
+
+        // Call VariantRecalibrator
         File analysisFile = new File("recalibrated_variants.vcf");
-        VariantRecalibrator variantRecalibrator = new VariantRecalibrator(genome, genotypeGVCF,
+        VariantRecalibrator variantRecalibrator = new VariantRecalibrator(genome, /*variantAnnotated*/genotypeGVCF,
                 analysisFile, hapmap, omni, thousandG, dbSNP, mills_indel);
         variantRecalibrator.execRecalibration_SNP();
-        variantRecalibrator.execApplyRecalibration_SNP();
-        variantRecalibrator.execRecalibration_INDEL();
-        variantRecalibrator.execApplyRecalibration_INDEL();
+        //variantRecalibrator.execApplyRecalibration_SNP();
+        //variantRecalibrator.execRecalibration_INDEL();
+        //variantRecalibrator.execApplyRecalibration_INDEL();
     }
 
 }

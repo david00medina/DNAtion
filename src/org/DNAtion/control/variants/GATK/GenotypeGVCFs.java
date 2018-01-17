@@ -44,6 +44,7 @@ public class GenotypeGVCFs {
 		System.out.println("Executing GenotypeGVCFs . . .");
 		if (jointGVCFsCmd == null) return Aligner.FAILURE;  // TODO: Modify this line
 
+		jointGVCFsCmd.redirectError(ProcessBuilder.Redirect.to(new File("GenotypeGVCFs.log")));
 		try {
 			Process process = jointGVCFsCmd.start();
 			int exeCode = process.waitFor();

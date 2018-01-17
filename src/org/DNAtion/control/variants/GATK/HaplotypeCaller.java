@@ -23,6 +23,14 @@ public class HaplotypeCaller {
 				"-T", "HaplotypeCaller",
 				"-R", genome.getAbsolutePath(),
 				"-I", bam.getAbsolutePath(),
+				/*"--annotation Coverage",
+				"--annotation FisherStrand",
+				"--annotation MappingQualityRankSumTest",
+				"--annotation QualByDepth",
+				"--annotation RMSMappingQuality",
+				"--annotation ReadPosRankSumTest",
+				"--annotation StrandOddsRatio",
+				"--annotation InbreedingCoeff",*/
 				"--genotyping_mode", "DISCOVERY",
 				"-stand_call_conf", Integer.toString(call_threshold),
 				"--emitRefConfidence", "GVCF",
@@ -34,9 +42,9 @@ public class HaplotypeCaller {
 	}
 
 	private int runProcess() {
-		System.out.println("Executing HaplotypeCaler . . .");
+		System.out.println("Executing HaplotypeCaller . . .");
 		if (callVariantCmd == null) return Aligner.FAILURE;  // TODO: Modify this line
-
+		callVariantCmd.redirectError(ProcessBuilder.Redirect.to(new File("HaplotypeCaller.log")));
 		try {
 			Process process = callVariantCmd.start();
 			int exeCode = process.waitFor();
